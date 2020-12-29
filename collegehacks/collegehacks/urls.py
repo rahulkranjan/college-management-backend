@@ -20,4 +20,5 @@ from django.conf.urls import include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('college/', include('college.urls')),
+    path('Home', include('index.html')),
 ]
