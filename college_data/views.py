@@ -8,66 +8,65 @@ from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.renderers import JSONRenderer
 from college_data.serializers import *
-from college_management.settings import MEDIA_ROOT
+# from college_management.settings import MEDIA_ROOT
 
 
+# class InstituteWebView(APIView):
+#     serializer_class = InstituteSerializers
+#     filter_backends = [DjangoFilterBackend, ]
+#     filterset_fields = ['id', 'college_name']
+#     renderer_classes = [JSONRenderer]
+#     permission_classes = (permissions.AllowAny,)
 
-class InstituteWebView(APIView):
-    serializer_class = InstituteSerializers
-    filter_backends = [DjangoFilterBackend, ]
-    filterset_fields = ['id', 'college_name']
-    renderer_classes = [JSONRenderer]
-    permission_classes = (permissions.AllowAny,)
+#     def get(self, request, format=None):
+#         id = self.request.query_params.get('id', None)
+#         if id is not None:
+#             queryset = Institute.objects.filter(id=id).values().order_by('-id')
+#             if queryset:
+#                 if 'college_image' in queryset[0]:
+#                     queryset[0]['college_image']=MEDIA_ROOT+queryset[0]['college_image']
+#                 if 'background_image' in queryset[0]:
+#                     queryset[0]['background_image']=MEDIA_ROOT+queryset[0]['background_image']
+#                 if 'signature' in queryset[0]:
+#                     queryset[0]['signature']=MEDIA_ROOT+queryset[0]['signature']
+#                 if 'image' in queryset[0]:
+#                     queryset[0]['image']=MEDIA_ROOT+queryset[0]['image']
 
-    def get(self, request, format=None):
-        id = self.request.query_params.get('id', None)
-        if id is not None:
-            queryset = Institute.objects.filter(id=id).values().order_by('-id')
-            if queryset:
-                if 'college_image' in queryset[0]:
-                    queryset[0]['college_image']=MEDIA_ROOT+queryset[0]['college_image']
-                if 'background_image' in queryset[0]:
-                    queryset[0]['background_image']=MEDIA_ROOT+queryset[0]['background_image']
-                if 'signature' in queryset[0]:
-                    queryset[0]['signature']=MEDIA_ROOT+queryset[0]['signature']
-                if 'image' in queryset[0]:
-                    queryset[0]['image']=MEDIA_ROOT+queryset[0]['image']
-
-                return Response(queryset[0])
-            else:
-                return Response({}, status=status.HTTP_400_BAD_REQUEST)
-
-
-class InstituteList(APIView):
-
-    serializer_class = InstituteSerializers
-    filter_backends = [DjangoFilterBackend, ]
-    filterset_fields = ['id', 'college_name']
-    renderer_classes = [JSONRenderer]
-
-    def get(self, request, format=None):
-        queryset = Institute.objects.filter(user_institute = self.request.user).values().order_by('-id')
-        if queryset:
-            if 'college_image' in queryset[0]:
-                queryset[0]['college_image']=MEDIA_ROOT+queryset[0]['college_image']
-            if 'background_image' in queryset[0]:
-                queryset[0]['background_image']=MEDIA_ROOT+queryset[0]['background_image']
-            if 'signature' in queryset[0]:
-                queryset[0]['signature']=MEDIA_ROOT+queryset[0]['signature']
-            if 'image' in queryset[0]:
-                queryset[0]['image']=MEDIA_ROOT+queryset[0]['image']
-
-            return Response(queryset[0])
-        else:
-            return Response({}, status=status.HTTP_400_BAD_REQUEST)
+#                 return Response(queryset[0])
+#             else:
+#                 return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
 
-    def post(self, request, format=None):
-        serializer = InstituteSerializers(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+# class InstituteList(APIView):
+
+#     serializer_class = InstituteSerializers
+#     filter_backends = [DjangoFilterBackend, ]
+#     filterset_fields = ['id', 'college_name']
+#     renderer_classes = [JSONRenderer]
+
+#     def get(self, request, format=None):
+#         queryset = Institute.objects.filter(user_institute = self.request.user).values().order_by('-id')
+#         if queryset:
+#             if 'college_image' in queryset[0]:
+#                 queryset[0]['college_image']=MEDIA_ROOT+queryset[0]['college_image']
+#             if 'background_image' in queryset[0]:
+#                 queryset[0]['background_image']=MEDIA_ROOT+queryset[0]['background_image']
+#             if 'signature' in queryset[0]:
+#                 queryset[0]['signature']=MEDIA_ROOT+queryset[0]['signature']
+#             if 'image' in queryset[0]:
+#                 queryset[0]['image']=MEDIA_ROOT+queryset[0]['image']
+
+#             return Response(queryset[0])
+#         else:
+#             return Response({}, status=status.HTTP_400_BAD_REQUEST)
+
+
+#     def post(self, request, format=None):
+#         serializer = InstituteSerializers(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class InstituteDetail(APIView):
@@ -97,7 +96,6 @@ class InstituteDetail(APIView):
         institute = self.get_object(pk)
         institute.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
 
 
 class SemesterList(ListAPIView):
@@ -152,7 +150,7 @@ class SessionList(ListAPIView):
 
     serializer_class = SessionSerializers
     filter_backends = [DjangoFilterBackend, ]
-    filterset_fields = ['id', 'session_name','start_date','end_date']
+    filterset_fields = ['id', 'session_name', 'start_date', 'end_date']
     renderer_classes = [JSONRenderer]
 
     def get_queryset(self):
@@ -196,12 +194,11 @@ class SessionDetail(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-
 class SemesterSessionList(ListAPIView):
 
     serializer_class = SemesterSessionInfoSerializers
     filter_backends = [DjangoFilterBackend, ]
-    filterset_fields = ['id', 'session','semester','course']
+    filterset_fields = ['id', 'session', 'semester', 'course']
     renderer_classes = [JSONRenderer]
 
     def get_queryset(self):
@@ -244,11 +241,12 @@ class SemesterSessionDetail(APIView):
         semester_session.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 class CourseList(ListAPIView):
 
     serializer_class = CourseInfoSerializers
     filter_backends = [DjangoFilterBackend, ]
-    filterset_fields = ['id', 'course_name','course_code']
+    filterset_fields = ['id', 'course_name', 'course_code']
     renderer_classes = [JSONRenderer]
 
     def get_queryset(self):
@@ -296,7 +294,7 @@ class DepartmentList(ListAPIView):
 
     serializer_class = DepartmentSerializers
     filter_backends = [DjangoFilterBackend, ]
-    filterset_fields = ['id','department_name']
+    filterset_fields = ['id', 'department_name']
     renderer_classes = [JSONRenderer]
 
     def get_queryset(self):
